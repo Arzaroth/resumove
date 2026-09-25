@@ -15,7 +15,7 @@ from .errors import MoveError
 from .paths import project_name
 from .registry import PROC_ROOT, session_is_live
 from .store import Session, find_session
-from .transcript import cwd_replacement, prefix_replacement, recorded_cwd, rewrite
+from .transcript import recorded_cwd, relocate
 
 
 @dataclass(frozen=True)
@@ -49,10 +49,13 @@ def execute(plan: MovePlan) -> None:
     source, destination = plan.source, plan.destination
     destination.project_dir.mkdir(parents=True, exist_ok=True)
 
-    replacements = [prefix_replacement(source.artifacts, destination.artifacts)]
-    if plan.old_cwd is not None:
-        replacements.append(cwd_replacement(plan.old_cwd, str(plan.target)))
-    data = rewrite(source.transcript.read_bytes(), replacements)
+    data = relocate(
+        source.transcript.read_bytes(),
+        source.artifacts,
+        destination.artifacts,
+        plan.old_cwd,
+        plan.target,
+    )
 
     fd, tmp_name = tempfile.mkstemp(prefix=f".{source.id}.", dir=destination.project_dir)
     tmp = Path(tmp_name)

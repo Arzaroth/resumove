@@ -6,13 +6,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from resumove.transcript import (
-    cwd_replacement,
-    json_string,
-    prefix_replacement,
-    recorded_cwd,
-    rewrite,
-)
+from resumove.transcript import recorded_cwd, relocate
+
+OLD = Path("/p/-a/id")
+NEW = Path("/p/-b/id")
 
 
 def test_recorded_cwd_takes_first_usable_entry(tmp_path: Path) -> None:
@@ -35,24 +32,23 @@ def test_recorded_cwd_without_any(tmp_path: Path) -> None:
     assert recorded_cwd(transcript) is None
 
 
-def test_json_string_keeps_non_ascii() -> None:
-    assert json_string('/é/"q"') == '"/é/\\"q\\""'
-
-
-def test_cwd_replacement() -> None:
-    assert cwd_replacement("/a", "/b c") == ('"cwd":"/a"', '"cwd":"/b c"')
-
-
-def test_prefix_replacement_is_unquoted_and_slash_terminated() -> None:
-    assert prefix_replacement(Path("/p/-a/id"), Path("/p/-b/id")) == ("/p/-a/id/", "/p/-b/id/")
-
-
-def test_rewrite_applies_every_replacement() -> None:
+def test_relocate_rewrites_artifact_paths_and_cwd() -> None:
     data = b'{"cwd":"/a","p":"/p/-a/id/x","q":"/p/-a/idx"}'
-    result = rewrite(data, [cwd_replacement("/a", "/é"), ("/p/-a/id/", "/p/-b/id/")])
+    result = relocate(data, OLD, NEW, "/a", Path("/é"))
     assert result == '{"cwd":"/é","p":"/p/-b/id/x","q":"/p/-a/idx"}'.encode()
 
 
-def test_rewrite_leaves_other_cwd_mentions() -> None:
+def test_relocate_matches_json_escaped_values() -> None:
+    data = '{"cwd":"/é/\\"q\\"","p":"/p/-é/id/x"}'.encode()
+    result = relocate(data, Path("/p/-é/id"), NEW, '/é/"q"', Path("/z"))
+    assert result == b'{"cwd":"/z","p":"/p/-b/id/x"}'
+
+
+def test_relocate_leaves_other_cwd_mentions() -> None:
     data = b'{"cwd":"/a/b","text":"cd /a"}'
-    assert rewrite(data, [cwd_replacement("/a", "/z")]) == data
+    assert relocate(data, OLD, NEW, "/a", Path("/z")) == data
+
+
+def test_relocate_without_cwd_keeps_it() -> None:
+    data = b'{"cwd":"/a","p":"/p/-a/id/x"}'
+    assert relocate(data, OLD, NEW, None, Path("/z")) == b'{"cwd":"/a","p":"/p/-b/id/x"}'

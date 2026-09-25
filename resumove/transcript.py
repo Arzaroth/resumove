@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Iterable
 from pathlib import Path
 
 
@@ -21,19 +20,18 @@ def recorded_cwd(transcript: Path) -> str | None:
     return None
 
 
-def json_string(value: str) -> str:
-    return json.dumps(value, ensure_ascii=False)
-
-
-def cwd_replacement(old_cwd: str, new_cwd: str) -> tuple[str, str]:
-    return f'"cwd":{json_string(old_cwd)}', f'"cwd":{json_string(new_cwd)}'
-
-
-def prefix_replacement(old_dir: Path, new_dir: Path) -> tuple[str, str]:
-    return json_string(f"{old_dir}/")[1:-1], json_string(f"{new_dir}/")[1:-1]
-
-
-def rewrite(data: bytes, replacements: Iterable[tuple[str, str]]) -> bytes:
-    for old, new in replacements:
-        data = data.replace(old.encode(), new.encode())
+def relocate(
+    data: bytes, old_artifacts: Path, new_artifacts: Path, old_cwd: str | None, new_cwd: Path
+) -> bytes:
+    data = data.replace(_escaped(f"{old_artifacts}/"), _escaped(f"{new_artifacts}/"))
+    if old_cwd is not None:
+        data = data.replace(_cwd_field(old_cwd), _cwd_field(str(new_cwd)))
     return data
+
+
+def _escaped(value: str) -> bytes:
+    return json.dumps(value, ensure_ascii=False)[1:-1].encode()
+
+
+def _cwd_field(cwd: str) -> bytes:
+    return b'"cwd":"' + _escaped(cwd) + b'"'
