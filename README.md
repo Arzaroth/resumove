@@ -1,4 +1,4 @@
-# claude-mv-session
+# resumove
 
 Move a Claude Code conversation to another folder, so `claude --resume <id>` finds it
 when run from there.
@@ -13,7 +13,7 @@ results, subagent logs) to the target folder's project, and rewrites the recorde
 ## Usage
 
 ```bash
-claude-mv-session <session-id> <target-dir>
+resumove <session-id> <target-dir>
 cd <target-dir> && claude --resume <session-id>
 ```
 

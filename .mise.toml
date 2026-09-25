@@ -31,9 +31,9 @@ description = "Build wheel"
 run = "uv build"
 
 [tasks.install-tool]
-description = "Put claude-mv-session on your PATH as an editable uv tool, so repo edits apply immediately"
+description = "Put resumove on your PATH as an editable uv tool, so repo edits apply immediately"
 run = 'uv tool install --editable --force "{{config_root}}"'
 
 [tasks.uninstall-tool]
-description = "Remove the claude-mv-session uv tool"
-run = "uv tool uninstall claude-mv-session"
+description = "Remove the resumove uv tool"
+run = "uv tool uninstall resumove"

@@ -11,10 +11,10 @@ from pathlib import Path
 
 import pytest
 
-from claude_mv_session.errors import MoveError
-from claude_mv_session.mover import MovePlan, execute, plan_move
-from claude_mv_session.paths import project_name
-from claude_mv_session.store import Session
+from resumove.errors import MoveError
+from resumove.mover import MovePlan, execute, plan_move
+from resumove.paths import project_name
+from resumove.store import Session
 
 from .conftest import OLD_CWD, SESSION_ID, fake_process, make_session, register
 

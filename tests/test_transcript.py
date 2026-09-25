@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from claude_mv_session.transcript import (
+from resumove.transcript import (
     cwd_replacement,
     json_string,
     prefix_replacement,

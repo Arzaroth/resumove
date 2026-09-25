@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "claude-mv-session"
+name = "resumove"
 description = "Move a Claude Code conversation to another folder so it can be resumed from there."
 authors = [
     {name = "Marc-Etienne Barrut", email = "lekva+github@arzaroth.com"},
@@ -16,13 +16,13 @@ dynamic = ["version"]
 dependencies = []
 
 [project.scripts]
-claude-mv-session = "claude_mv_session.cli:main"
+resumove = "resumove.cli:main"
 
 [tool.hatch.version]
-path = "claude_mv_session/__init__.py"
+path = "resumove/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["claude_mv_session"]
+packages = ["resumove"]
 
 [dependency-groups]
 dev = [
@@ -44,7 +44,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = ["UP009"]
 
 [tool.coverage.run]
-source = ["claude_mv_session"]
+source = ["resumove"]
 branch = true
 
 [tool.coverage.report]

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from claude_mv_session.registry import process_matches, session_is_live
+from resumove.registry import process_matches, session_is_live
 
 from .conftest import SESSION_ID, fake_process, register
 

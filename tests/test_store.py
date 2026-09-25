@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from claude_mv_session.errors import MoveError
-from claude_mv_session.store import Session, find_session, validate_session_id
+from resumove.errors import MoveError
+from resumove.store import Session, find_session, validate_session_id
 
 from .conftest import SESSION_ID, make_session
 

@@ -10,10 +10,10 @@ from pathlib import Path
 
 import pytest
 
-from claude_mv_session import __version__
-from claude_mv_session.cli import main, report
-from claude_mv_session.mover import MovePlan
-from claude_mv_session.store import Session
+from resumove import __version__
+from resumove.cli import main, report
+from resumove.mover import MovePlan
+from resumove.store import Session
 
 from .conftest import OLD_CWD, SESSION_ID, make_session
 
@@ -35,7 +35,7 @@ def test_main_reports_errors(capsys, target: Path) -> None:
     assert main([SESSION_ID, str(target)]) == 1
     captured = capsys.readouterr()
     assert captured.out == ""
-    assert captured.err.startswith("claude-mv-session: no session")
+    assert captured.err.startswith("resumove: no session")
 
 
 def test_main_requires_both_arguments(capsys) -> None:
@@ -49,7 +49,7 @@ def test_version(capsys) -> None:
     with pytest.raises(SystemExit) as caught:
         main(["--version"])
     assert caught.value.code == 0
-    assert capsys.readouterr().out.strip() == f"claude-mv-session {__version__}"
+    assert capsys.readouterr().out.strip() == f"resumove {__version__}"
 
 
 def test_report_quotes_target_and_falls_back_to_project_dir() -> None:
@@ -68,8 +68,8 @@ def test_report_quotes_target_and_falls_back_to_project_dir() -> None:
 
 
 def test_module_entry_point(monkeypatch, capsys) -> None:
-    monkeypatch.setattr(sys, "argv", ["claude-mv-session", "--version"])
+    monkeypatch.setattr(sys, "argv", ["resumove", "--version"])
     with pytest.raises(SystemExit) as caught:
-        runpy.run_module("claude_mv_session", run_name="__main__")
+        runpy.run_module("resumove", run_name="__main__")
     assert caught.value.code == 0
     assert __version__ in capsys.readouterr().out

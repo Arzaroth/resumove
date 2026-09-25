@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from claude_mv_session.errors import MoveError
-from claude_mv_session.paths import MAX_PROJECT_NAME_LENGTH, config_dir, project_name
+from resumove.errors import MoveError
+from resumove.paths import MAX_PROJECT_NAME_LENGTH, config_dir, project_name
 
 
 def test_config_dir_honours_env() -> None:

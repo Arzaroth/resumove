@@ -16,7 +16,7 @@ from .errors import MoveError
 from .mover import MovePlan, execute, plan_move
 from .paths import config_dir
 
-PROG = "claude-mv-session"
+PROG = "resumove"
 
 
 def build_parser() -> argparse.ArgumentParser:
