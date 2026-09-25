@@ -26,15 +26,16 @@ File paths mentioned inside the conversation itself are left untouched.
 ## Install
 
 ```bash
-mise run install-tool   # uv tool install into ~/.local/bin
+mise run install-tool    # uv tool install --editable, so edits to the repo apply immediately
 ```
 
 ## Development
 
 ```bash
-mise run install   # uv sync
-mise run check     # ty + ruff
-mise run cov       # pytest with the coverage floor
+mise run install     # uv sync
+mise run test        # fails under 100% line and branch coverage
+mise run check       # ty + ruff
+mise run fmt
 ```
 
 ## License
