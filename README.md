@@ -36,3 +36,7 @@ mise run install   # uv sync
 mise run check     # ty + ruff
 mise run cov       # pytest with the coverage floor
 ```
+
+## License
+
+MIT, see [LICENSE](LICENSE).
