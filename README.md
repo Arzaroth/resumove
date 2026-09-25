@@ -26,6 +26,12 @@ File paths mentioned inside the conversation itself are left untouched.
 ## Install
 
 ```bash
+uv tool install git+https://github.com/Arzaroth/resumove@v0.1.0
+```
+
+Or, from a clone:
+
+```bash
 mise run install-tool    # uv tool install --editable, so edits to the repo apply immediately
 ```
 
@@ -37,6 +43,13 @@ mise run test        # fails under 100% line and branch coverage
 mise run check       # ty + ruff
 mise run fmt
 ```
+
+## Releasing
+
+Bump `__version__` in `resumove/__init__.py`, move the `Unreleased` entries of
+`CHANGELOG.md` under the new version, then push a `v<version>` tag. The release
+workflow checks the tag against the built version and publishes the wheel and
+sdist to a GitHub release, with that version's changelog section as its notes.
 
 ## License
 
