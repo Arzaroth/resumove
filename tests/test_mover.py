@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 from resumove.errors import MoveError
-from resumove.mover import MovePlan, execute, plan_move
+from resumove.mover import MovePlan, execute, plan_move, write_like
 from resumove.paths import project_name
 from resumove.store import Session
 
@@ -133,15 +133,16 @@ def test_execute_into_existing_project(config: Path, target: Path, proc_root: Pa
     assert plan.destination.transcript.exists()
 
 
-def test_execute_cleans_up_on_failure(
+def fail(*_: object) -> None:
+    raise OSError("disk full")
+
+
+def test_execute_leaves_the_source_whole_on_failure(
     config: Path, target: Path, proc_root: Path, monkeypatch
 ) -> None:
     source_dir = make_session(config)
     original = (source_dir / f"{SESSION_ID}.jsonl").read_bytes()
     plan = plan_move(config, SESSION_ID, target, proc_root)
-
-    def fail(*_: object) -> None:
-        raise OSError("disk full")
 
     monkeypatch.setattr(shutil, "copystat", fail)
     with pytest.raises(OSError, match="disk full"):
@@ -149,4 +150,20 @@ def test_execute_cleans_up_on_failure(
 
     assert list(plan.destination.project_dir.iterdir()) == []
     assert (source_dir / f"{SESSION_ID}.jsonl").read_bytes() == original
-    assert plan.source.artifacts.is_dir()
+    assert (plan.source.artifacts / "tool-results" / "a.txt").read_text() == "hi"
+
+
+def test_write_like_replaces_atomically_with_template_stat(tmp_path: Path) -> None:
+    template = tmp_path / "template"
+    template.write_bytes(b"old")
+    os.chmod(template, 0o600)
+    os.utime(template, (1_000_000, 1_000_000))
+    path = tmp_path / "out"
+    path.write_bytes(b"previous")
+
+    write_like(path, b"new", template)
+
+    assert path.read_bytes() == b"new"
+    assert path.stat().st_mtime == 1_000_000
+    assert path.stat().st_mode & 0o777 == 0o600
+    assert {p.name for p in tmp_path.iterdir()} == {"template", "out"}

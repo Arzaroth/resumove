@@ -56,21 +56,23 @@ def execute(plan: MovePlan) -> None:
         plan.old_cwd,
         plan.target,
     )
-
-    fd, tmp_name = tempfile.mkstemp(prefix=f".{source.id}.", dir=destination.project_dir)
-    tmp = Path(tmp_name)
-    try:
-        with os.fdopen(fd, "wb") as out:
-            out.write(data)
-        shutil.copystat(source.transcript, tmp)
-        tmp.replace(destination.transcript)
-    except BaseException:
-        tmp.unlink(missing_ok=True)
-        raise
-
+    write_like(destination.transcript, data, source.transcript)
     if source.artifacts.is_dir():
         source.artifacts.rename(destination.artifacts)
     source.transcript.unlink()
 
     with contextlib.suppress(OSError):
         source.project_dir.rmdir()
+
+
+def write_like(path: Path, data: bytes, template: Path) -> None:
+    fd, tmp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    tmp = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "wb") as out:
+            out.write(data)
+        shutil.copystat(template, tmp)
+        tmp.replace(path)
+    except BaseException:
+        tmp.unlink(missing_ok=True)
+        raise
