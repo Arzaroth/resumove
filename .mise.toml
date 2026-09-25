@@ -27,7 +27,7 @@ description = "Run pytest"
 run = "uv run pytest tests/ -v"
 
 [tasks.cov]
-description = "Run pytest with coverage"
+description = "Run pytest with coverage (fails below 100%)"
 run = "uv run pytest --cov --cov-report=term-missing"
 
 [tasks.build]

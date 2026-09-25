@@ -47,6 +47,7 @@ branch = true
 
 [tool.coverage.report]
 show_missing = true
+fail_under = 100
 exclude_also = [
     "if __name__ == .__main__.:",
 ]
