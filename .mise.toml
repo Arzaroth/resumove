@@ -7,33 +7,33 @@ description = "Install all dependencies (including dev)"
 run = "uv sync"
 
 [tasks.typecheck]
-description = "Run ty type checker"
-run = "uv run ty check claude_mv_session/ tests/"
+description = "Type-check with ty"
+run = "uv run ty check"
 
 [tasks.lint]
 description = "Lint with ruff"
-run = "uv run ruff check claude_mv_session/ tests/"
+run = "uv run ruff check"
 
 [tasks.fmt]
 description = "Format with ruff"
-run = "uv run ruff format claude_mv_session/ tests/"
+run = "uv run ruff format"
 
 [tasks.check]
 description = "Typecheck + lint"
 depends = ["typecheck", "lint"]
 
 [tasks.test]
-description = "Run pytest"
-run = "uv run pytest tests/ -v"
-
-[tasks.cov]
-description = "Run pytest with coverage (fails below 100%)"
-run = "uv run pytest --cov --cov-report=term-missing"
+description = "Run pytest (fails under 100% line and branch coverage)"
+run = "uv run pytest"
 
 [tasks.build]
 description = "Build wheel"
 run = "uv build"
 
 [tasks.install-tool]
-description = "Install the claude-mv-session command with uv tool"
-run = "uv tool install --force --reinstall ."
+description = "Put claude-mv-session on your PATH as an editable uv tool, so repo edits apply immediately"
+run = 'uv tool install --editable --force "{{config_root}}"'
+
+[tasks.uninstall-tool]
+description = "Remove the claude-mv-session uv tool"
+run = "uv tool uninstall claude-mv-session"
