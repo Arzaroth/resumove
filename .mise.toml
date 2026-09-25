@@ -1,0 +1,39 @@
+[tools]
+python = "3.12"
+uv = "latest"
+
+[tasks.install]
+description = "Install all dependencies (including dev)"
+run = "uv sync"
+
+[tasks.typecheck]
+description = "Run ty type checker"
+run = "uv run ty check claude_mv_session/ tests/"
+
+[tasks.lint]
+description = "Lint with ruff"
+run = "uv run ruff check claude_mv_session/ tests/"
+
+[tasks.fmt]
+description = "Format with ruff"
+run = "uv run ruff format claude_mv_session/ tests/"
+
+[tasks.check]
+description = "Typecheck + lint"
+depends = ["typecheck", "lint"]
+
+[tasks.test]
+description = "Run pytest"
+run = "uv run pytest tests/ -v"
+
+[tasks.cov]
+description = "Run pytest with coverage"
+run = "uv run pytest --cov --cov-report=term-missing"
+
+[tasks.build]
+description = "Build wheel"
+run = "uv build"
+
+[tasks.install-tool]
+description = "Install the claude-mv-session command with uv tool"
+run = "uv tool install --force --reinstall ."
