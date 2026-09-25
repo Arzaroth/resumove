@@ -57,8 +57,12 @@ def execute(plan: MovePlan) -> None:
         plan.target,
     )
     write_like(destination.transcript, data, source.transcript)
-    if source.artifacts.is_dir():
-        source.artifacts.rename(destination.artifacts)
+    try:
+        if source.artifacts.is_dir():
+            source.artifacts.rename(destination.artifacts)
+    except BaseException:
+        destination.transcript.unlink()
+        raise
     source.transcript.unlink()
 
     with contextlib.suppress(OSError):

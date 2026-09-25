@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- A move that fails while moving the companion directory no longer leaves the
+  transcript in both projects, which made the next attempt refuse the session as
+  found in several projects.
+
 ## [0.1.0] - 2026-09-25
 
 ### Added

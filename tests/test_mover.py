@@ -137,14 +137,17 @@ def fail(*_: object) -> None:
     raise OSError("disk full")
 
 
+@pytest.mark.parametrize(
+    ("owner", "name"), [(shutil, "copystat"), (Path, "rename")], ids=["transcript", "artifacts"]
+)
 def test_execute_leaves_the_source_whole_on_failure(
-    config: Path, target: Path, proc_root: Path, monkeypatch
+    config: Path, target: Path, proc_root: Path, monkeypatch, owner: object, name: str
 ) -> None:
     source_dir = make_session(config)
     original = (source_dir / f"{SESSION_ID}.jsonl").read_bytes()
     plan = plan_move(config, SESSION_ID, target, proc_root)
 
-    monkeypatch.setattr(shutil, "copystat", fail)
+    monkeypatch.setattr(owner, name, fail)
     with pytest.raises(OSError, match="disk full"):
         execute(plan)
 
