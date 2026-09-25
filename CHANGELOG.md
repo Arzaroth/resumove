@@ -7,12 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- A move that fails while moving the companion directory no longer leaves the
-  transcript in both projects, which made the next attempt refuse the session as
-  found in several projects.
-
 ## [0.1.0] - 2026-09-25
 
 ### Added
@@ -24,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   companion directory are rewritten.
 - It refuses to move a conversation still open in a running `claude`, read from
   `~/.claude/sessions/` and checked against the process start time so a reused
-  PID does not block it. It never overwrites anything at the destination.
+  PID does not block it. It never overwrites anything at the destination, and a
+  move that fails partway leaves both projects as they were.
 - `CLAUDE_CONFIG_DIR` is honoured.
 
 [Unreleased]: https://github.com/Arzaroth/resumove/compare/v0.1.0...HEAD
