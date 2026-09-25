@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from resumove.errors import MoveError
-from resumove.store import Session, find_session, validate_session_id
+from resumove.store import Session, find_session
 
 from .conftest import SESSION_ID, make_session
 
@@ -20,19 +20,11 @@ def test_session_paths() -> None:
     assert session.artifacts == Path(f"/p/-proj/{SESSION_ID}")
 
 
-def test_validate_session_id_accepts_uuid() -> None:
-    assert validate_session_id(SESSION_ID) == SESSION_ID
-
-
 @pytest.mark.parametrize("session_id", ["nope", "*", "../../etc/passwd"])
-def test_validate_session_id_rejects_non_uuid(session_id: str) -> None:
+def test_find_session_rejects_non_uuid_before_globbing(config: Path, session_id: str) -> None:
+    make_session(config)
     with pytest.raises(MoveError, match="not a session id"):
-        validate_session_id(session_id)
-
-
-def test_find_session_rejects_bad_id_before_globbing(config: Path) -> None:
-    with pytest.raises(MoveError, match="not a session id"):
-        find_session(config / "projects", "*")
+        find_session(config / "projects", session_id)
 
 
 def test_find_session_locates_project(config: Path) -> None:

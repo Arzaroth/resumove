@@ -25,16 +25,11 @@ class Session:
         return self.project_dir / self.id
 
 
-def validate_session_id(session_id: str) -> str:
+def find_session(projects_dir: Path, session_id: str) -> Session:
     try:
         uuid.UUID(session_id)
     except ValueError:
         raise MoveError(f"not a session id: {session_id}") from None
-    return session_id
-
-
-def find_session(projects_dir: Path, session_id: str) -> Session:
-    validate_session_id(session_id)
     matches = sorted(projects_dir.glob(f"*/{session_id}.jsonl"))
     if not matches:
         raise MoveError(f"no session {session_id} under {projects_dir}")
