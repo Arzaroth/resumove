@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-10
+
 ### Changed
 
 - Python 3.11 is supported, and tested in CI alongside 3.12 to 3.14.
@@ -26,5 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   move that fails partway leaves both projects as they were.
 - `CLAUDE_CONFIG_DIR` is honoured.
 
-[Unreleased]: https://github.com/Arzaroth/resumove/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/Arzaroth/resumove/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Arzaroth/resumove/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Arzaroth/resumove/releases/tag/v0.1.0
